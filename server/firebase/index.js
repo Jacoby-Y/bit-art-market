@@ -1,8 +1,8 @@
 import admin from "firebase-admin";
-import serviceAccount from "../config/serviceAccountKey.js";
+// import serviceAccount from "../config/serviceAccountKey.js";
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(JSON.parse(process.env.ACCOUNT_KEY)),
 });
 
 export const fire_admin = admin;
