@@ -3,12 +3,13 @@
     import { replace } from "svelte-spa-router";
     import Gallery from "../comps/Gallery.svelte";
     import Logs from "../comps/home/Logs.svelte";
-    import { alert, user } from "../stores/store";
+    import { alert, user, user_gallery } from "../stores/store";
     import client from "../utils/client";
 
-    let gallery: ArtData[] = null;
+    let gallery: ArtData[] = $user_gallery;
+    $: gallery = $user_gallery;
     
-    let sub_pages = [
+    $: sub_pages = [
         { comp: Gallery, props: { gallery, hide_owner: false } as {}, name: "Gallery" },
         { comp: Logs, props: {}, name: "Logs" },
     ];
@@ -20,6 +21,8 @@
         // console.log(res);
         
         gallery = res.data.gallery;
+        $user_gallery = gallery;
+        // gallery[7].palette = "Old Glory";
 
         const self = await client.getSelf();
         if (!self.ok) {

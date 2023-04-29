@@ -2,7 +2,6 @@
     import Gallery from "../Gallery.svelte";
     import Loading from "../Loading.svelte";
 
-
     export let gallery: ArtData[] = null;
 </script>
 

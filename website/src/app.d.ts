@@ -47,6 +47,7 @@ interface ArtData {
     likes: number
     dislikes: number
     user_rating?: ("likes" | "dislikes")
+    palette?: string
 }
 
 interface FollowingTopThree {
@@ -56,3 +57,13 @@ interface FollowingTopThree {
 
 type GetSelf = ClientResult<{ username: string; coins: number; daily_gain: number; hours_to_bonus: number; }>
 
+type Palette = [string, string, string];
+
+type Paints = {
+    [name: string]: number
+}
+
+type PaletteEdit = {
+    on: boolean
+    art_data: ArtData
+}

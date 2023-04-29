@@ -13,17 +13,17 @@
     import Index from "./pages/Index.svelte";
     import UserGallery from "./pages/UserGallery.svelte";
     import Loading from "./comps/Loading.svelte";
+    import Shop from "./pages/Shop.svelte";
     import Faq from "./pages/FAQ.svelte";
 
     const routes = {
         "/": Index,
         "/home": Home,
         // "/login": Login,
-        "/login": Wrap({
-            asyncComponent: ()=> (console.log("Loading Login"), import("./pages/Login.svelte")),
-        }),
+        "/login": Login,
         "/set-name": SetName,
         "/canvas": MakeArt,
+        "/shop": Shop,
         "/search/:filter": Search,
         "/gallery/:username": UserGallery,
         "/social": Social,
@@ -34,7 +34,8 @@
     import { replace } from "svelte-spa-router";
     import { onMount } from "svelte/internal";
     import client from "./utils/client";
-    import { alert, loading, user } from "./stores/store";
+    import { alert, loading, palette_edit, user } from "./stores/store";
+    import PaletteModal from "./comps/PaletteModal.svelte";
     
 
     let loading_user = true;
@@ -71,7 +72,13 @@
     <Loading center={$loading.center} />
 {/if}
 
+{#if $palette_edit.on}
+    <PaletteModal />
+{/if}
+
 <style>
+    /* dark:  #1d1d21 */
+    /* light: #232627 */
     main {
         width: 100%;
         height: 100%;

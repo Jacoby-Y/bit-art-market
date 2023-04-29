@@ -1,23 +1,29 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { link } from "svelte-spa-router";
-    import { alert, loading, user } from "../stores/store";
+    import { alert, loading, palette_edit, user } from "../stores/store";
     import { colorFromStr, drawArtToCanvas } from "../utils/art";
     import client from "../utils/client";
+    import config from "../config";
 
     export let dim = false;
     export let art_data: ArtData;
     export let show_details: boolean = true;
+    export let just_draw_it = false;
 
     let canvas: HTMLCanvasElement;
     let ctx: CanvasRenderingContext2D;
     let purchased = false;
 
+    $: ctx && art_data && drawCanvas();
+
     onMount(()=>{
         ctx = canvas.getContext("2d");
         canvas.width = canvas.height = 256;
-        drawArtToCanvas(ctx, art_data.data, true);
+        drawCanvas();
     });
+
+    const drawCanvas = ()=> drawArtToCanvas(ctx, art_data.data, true, config.color_map[art_data.palette] ?? config.color_map["B&W"]);
 
     let posting_rating = false;
     const rateArt = async (type: ("likes" | "dislikes"))=>{
@@ -90,14 +96,22 @@
         }
         editing = false;
     }
+
+    const editPalette = async ()=>{
+        $palette_edit.on = true;
+        // Give it a copy of the art data (I don't know why, but it messes it up otherwise)
+        $palette_edit.art_data = JSON.parse(JSON.stringify(art_data));
+        editing = false;
+    }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <main class:purchased class:dim>
-    {#if show_details}    
+    {#if show_details && !just_draw_it}    
     <div id="details-wrapper">
         <i class="bi bi-question-square hint"></i>
         <div id="details">
+            <p><i>Palette: </i>{art_data.palette ?? "B&W"}</p>
             <p><i>Artist: </i><a href="/gallery/{art_data.artist}" use:link>{art_data.artist}</a></p>
             {#if art_data.owner != $user?.username}
                 <p><i>Owner: </i><a href="/gallery/{art_data.owner}" use:link>{art_data.owner}</a></p>
@@ -107,19 +121,22 @@
     {/if}
     <div id="canvas-wrapper">
         <canvas bind:this={canvas} style="border-color: {colorFromStr(art_data.data)}"></canvas>
-        {#if editing}
+        {#if editing && !just_draw_it}
         <div id="editor">
             <p class="hint">Any cost above 0 will put the art piece up for sale.</p>
             <div>
                 <input type="integer" placeholder="New art cost" bind:value={cost_input} />
                 <button disabled={!valid_cost} on:click={setCost}>Set cost</button>
             </div>
+            <i class="bi bi-palette" id="palette" on:click={editPalette} />
         </div>
         {/if}
-        {#if art_data.cost > 0}
+        {#if art_data.cost > 0 && !just_draw_it}
             <i class="bi bi-coin" id="cost">{art_data.cost}</i>
         {/if}
     </div>
+
+    {#if !just_draw_it}
     <section>
         <i class="bi bi-check-square" id="likes" class:selected={art_data.user_rating == "likes"} on:click={()=> rateArt("likes")}></i>
         {art_data.likes}
@@ -132,6 +149,7 @@
             <i class="bi bi-bag-plus-fill corner-icon" on:click={purchase}></i>
         {/if}
     </section>
+    {/if}
 </main>
 
 <style>
@@ -201,6 +219,11 @@
     #editor button {
         width: max-content;
         white-space: nowrap;
+    }
+    #editor #palette {
+        margin: 0 auto;
+        margin-top: 0.5rem;
+        padding: 0.5rem;
     }
 
     section {

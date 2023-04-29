@@ -14,6 +14,7 @@
         <a href="/social" use:link>Social</a>
         <a href="/search/popular" use:link>Search</a>
         <a href="/canvas" use:link>Canvas</a>
+        <a href="/shop" use:link>Shop</a>
     </nav>
     <a href="/" use:link id="home"><i class="bi bi-house-fill"></i></a>
     {:else}

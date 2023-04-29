@@ -180,6 +180,7 @@ export const authGallery = async (req, res)=>{
     const art_snap = await Art.where("owner.uid", "==", req.uid).get();
     const art_docs = await Promise.all(art_snap.docs.map((art_doc)=> getArtData(art_doc, req.uid)));
 
+    // console.log("Getting auth!");
     // console.log(art_docs[0])
 
     return [200, "Here ya' go!", { gallery: art_docs }];

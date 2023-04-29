@@ -11,9 +11,8 @@ export const deserializePixels = (comp_str: string)=>{
     return Array.from(b3_chunks.join("")).map(ch => +ch);
 }
 
-const colors = ["#000000", "#808080", "#ffffff"];
 /** Draw on canvas with given image data */
-export const drawArtToCanvas = (ctx: CanvasRenderingContext2D, data: string, compressed: boolean)=>{
+export const drawArtToCanvas = (ctx: CanvasRenderingContext2D, data: string, compressed: boolean, colors: Palette)=>{
     let pixels = data;
     if (compressed) pixels = deserializePixels(data).join("");
 

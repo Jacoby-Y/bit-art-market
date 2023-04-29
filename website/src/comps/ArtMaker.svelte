@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { drawArtToCanvas } from "../utils/art";
+    import config from "../config";
 
     let canvas: HTMLCanvasElement;
     let ctx: CanvasRenderingContext2D;
@@ -9,10 +10,15 @@
 
     let mouse = { px: 0, py: 0, over: false, down: false }
     export let pixels: number[] = [];
-    const color = ["#000000", "#808080", "#ffffff"];
+
+    let selected_theme = "B&W";
+    $: selected_palette = config.color_map[selected_theme] ?? config.color_map["B&W"];
+    let selecting_theme = false;
+
+    $: ctx && selected_theme && drawPixels();
 
     const drawPixels = ()=>{
-        drawArtToCanvas(ctx, pixels.join(""), false);
+        drawArtToCanvas(ctx, pixels.join(""), false, selected_palette);
     }
 
     const setPixel = ()=>{
@@ -69,6 +75,10 @@
         drawPixels();
     }
 
+    const setTheme = (name: string)=>{
+        selected_theme = name;
+    }
+
     let selected_color = 0;
 
 </script>
@@ -76,13 +86,34 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <main>
     <div id="colors">
-        <div class="color" style="background-color: #000000" class:selected={selected_color == 0} on:click={()=>{ selected_color = 0 }}></div>
-        <div class="color" style="background-color: #808080" class:selected={selected_color == 1} on:click={()=>{ selected_color = 1 }}></div>
-        <div class="color" style="background-color: #ffffff" class:selected={selected_color == 2} on:click={()=>{ selected_color = 2 }}></div>
-        <i class="bi bi-paint-bucket" id="paint" on:click={fillAll}></i>
+        <i class="bi bi-palette" id="palette-btn" on:click={()=>{selecting_theme = true}}></i>
+        {#each selected_palette as color, i}
+            <div class="color" style="background-color: {color}" class:selected={selected_color == i} on:click={()=>{ selected_color = i }}></div>
+            <!-- <div class="color" style="background-color: #808080" class:selected={selected_color == 1} on:click={()=>{ selected_color = 1 }}></div>
+            <div class="color" style="background-color: #ffffff" class:selected={selected_color == 2} on:click={()=>{ selected_color = 2 }}></div> -->
+        {/each}
+        <i class="bi bi-paint-bucket" id="fill" on:click={fillAll}></i>
     </div>
     <canvas bind:this={canvas} style="width: {size}px; height: {size}px;"></canvas>
 </main>
+
+{#if selecting_theme}
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<main id="palette-test" on:click={()=>{selecting_theme = false}}>
+    <div id="wrapper">
+        {#each Object.entries(config.color_map) as [name, [a, b, c]]}
+            <div class="color-wrapper" on:click={()=> setTheme(name)}>
+                <h3>{name}</h3>
+                <div class="colors">
+                    <div class="color" style="background-color: {a};"></div>
+                    <div class="color" style="background-color: {b};"></div>
+                    <div class="color" style="background-color: {c};"></div>
+                </div>
+            </div>
+        {/each}
+    </div>
+</main>
+{/if}
 
 <style>
     #colors {
@@ -108,13 +139,79 @@
     #colors .color.selected {
         border-radius: 50%;
     }
-    #colors #paint {
+    #fill, #palette-btn {
         color: black;
         font-size: 2rem;
         cursor: pointer;
         margin-left: 1rem;
     }
+    #palette-btn {
+        margin-left: 0;
+        margin-right: 1rem;
+    }
     canvas {
         border: 2px solid white;
     }
+
+    #palette-test {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #00000099;
+        z-index: 10;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #palette-test #wrapper {
+        background-color: #ddcbe0;
+        padding: 1rem 2rem;
+        padding-bottom: 2rem;
+        border-radius: 10px;
+
+        max-height: 80vh;
+        overflow-y: scroll;
+
+        /* display: flex;
+        flex-direction: column;
+        gap: 1rem; */
+
+        /* display: grid;
+        grid-auto-columns: max-content;
+        gap: 1rem 2rem; */
+
+        max-width: 40rem;
+
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem 2rem;
+        justify-content: center;
+    }
+
+    #palette-test .color-wrapper {
+        transition-duration: 0.3s;
+        cursor: pointer;
+    }
+    #palette-test .color-wrapper:hover {
+        transform: scale(1.1);
+    }
+
+    #palette-test .colors {
+        display: flex;
+        gap: 1rem;
+    }
+    #palette-test .color {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+    }
+    #palette-test h3 {
+        text-align: center;
+        color: black;
+        padding: 0.5rem;
+    }
+
 </style>

@@ -29,6 +29,7 @@
         following = res.data.type == "follow";
         alert.set({ theme: "success", msg: res.data.msg });
     }
+    
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
