@@ -69,5 +69,5 @@ node_modules/
 
 serviceAccountKey.js
 
-package.json
+package-lock.json
 pnpm-lock.yaml

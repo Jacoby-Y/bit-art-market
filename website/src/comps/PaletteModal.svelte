@@ -132,21 +132,6 @@
         background-color: #ddd;
         border-radius: 10px;
     }
-    #x {
-        height: 32px;
-        border-radius: 50%;
-        cursor: pointer;
-        color: #ff6363;
-        font-size: 2rem;
-        position: absolute;
-        right: 0;
-        top: 100%;
-        padding: 0.5rem;
-    }
-
-    .color {
-        /* border: 1px solid black; */
-    }
 
     #current-colors {
         display: flex;
