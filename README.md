@@ -1,4 +1,4 @@
-# Bit Art Market
+# TryteMart 32 (Formally known as *Bit Art Market*)
 
 This is my full stack app about creating, buying, selling, rating, and appreciating 16x16 pixel art!
 

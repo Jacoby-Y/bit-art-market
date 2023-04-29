@@ -17,12 +17,12 @@
         width: 100%;
     }
     h1 {
-        background-color: #333;
+        background-color: #1d1d21;
         padding: 1.5rem 1.7rem;
         cursor: pointer;
     }
     p {
-        background-color: #393939;
+        background-color: #101012;
         padding: 0 1.2rem;
         font-size: 1.3rem;
         overflow: hidden;

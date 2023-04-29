@@ -16,9 +16,9 @@
 
 <main>
     <header>
-        <h1>Bit Art Market</h1>
+        <h1>TryteMart 32</h1>
         <p>It's like NFTs without the blockchain</p>
-        <p class="hint">Name is a work-in-progress</p>
+        <!-- <p class="hint">Name is a work-in-progress</p> -->
         <a href="#three-random">
             <i class="arrow bi bi-arrow-down-short"></i>
         </a>
@@ -157,9 +157,13 @@
             text-decoration: none;
         }
         a h1 {
-            background-color: #222;
-            border-radius: 10px;
+            background-color: #1d1d21;
+            border-radius: 3rem;
             padding: 1rem 1.2rem;
+
+            &:hover {
+                filter: brightness(120%);
+            }
         }
 
         .hint {

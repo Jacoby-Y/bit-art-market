@@ -1,19 +1,20 @@
 <script lang="ts">
     import { link } from "svelte-spa-router";
     import config from "../config";
-    import { paint_inv, palette_edit, user_gallery } from "../stores/store";
+    import { palette_inv, palette_edit, user_gallery, alert } from "../stores/store";
     import ArtPiece from "./ArtPiece.svelte";
+    import client from "../utils/client";
 
     let art_data: ArtData = $palette_edit.art_data;
     $: art_data = $palette_edit.art_data;
-    $: palette = config.color_map[art_data.palette] ?? config.color_map["B&W"];
+    $: palette = config.palette_map[art_data.palette] ?? config.palette_map["B&W"];
     const og_palette = art_data.palette ?? "B&W";
     let selected_palette: string = null;
 
     // $: console.log(Object.assign(art_data, { palette: selected_palette }))
-    $: console.log(art_data.palette);
+    // $: console.log(art_data.palette);
 
-    const inventory = (og_palette == "B&W" ? [] : [["B&W", Infinity]]).concat(Object.entries($paint_inv));
+    const inventory = (og_palette == "B&W" ? [] : [["B&W", Infinity]]).concat(Object.entries($palette_inv));
 
     const close = ()=>{
         $palette_edit.on = false;
@@ -25,16 +26,25 @@
             selected_palette = "" + name;
         }
     }
-    const selectPaint = ()=>{
+    const useThisPalette = async ()=>{
+        const res = await client.setPalette(art_data.data, selected_palette);
+
+        if (!res.ok) {
+            alert.set({ theme: "error", msg: res?.data?.msg ?? "Uh oh..." });
+            return;
+        }
+
         $user_gallery.find(art => art.data == art_data.data).palette = selected_palette;
         $user_gallery = $user_gallery;
 
-        if (og_palette == "B&W") {
-            $paint_inv[selected_palette]--;
-        } else {
-            $paint_inv[og_palette]++;
-            $paint_inv[selected_palette]--;
-        }
+        $palette_inv = res.data.palettes;
+
+        // if (og_palette == "B&W") {
+        //     $palette_inv[selected_palette]--;
+        // } else {
+        //     $palette_inv[og_palette]++;
+        //     $palette_inv[selected_palette]--;
+        // }
 
         close();
     }
@@ -53,7 +63,7 @@
             </div>
             <div id="palette-options">
                 {#each inventory as [name, count]}
-                    {@const colors = config.color_map[name]}
+                    {@const colors = config.palette_map[name]}
                     {#if colors != undefined && og_palette != name && (+count ?? 0) > 0}
                         <div class="palette-option" class:selected={name == selected_palette} on:click={()=> selectPalette(name)}>
                             <h3 class="palette-name">
@@ -68,15 +78,15 @@
                     {/if}
                 {/each}
                 {#if inventory.length == 0}
-                    <div id="no-paint">
-                        <h3>You have no paints!</h3>
+                    <div id="no-palette">
+                        <h3>You have no palettes!</h3>
                         <p>Check out the <a href="/shop" use:link on:click={close}>shop</a></p>
                     </div>
                 {/if}
             </div>
         </section>
         {#if selected_palette && selected_palette != og_palette}
-            <button id="select-btn" on:click={selectPaint}>Select paint?</button>
+            <button id="select-btn" on:click={useThisPalette}>Select palette?</button>
         {/if}
         <i class="bi bi-x-circle-fill" id="x" on:click={close} />
     </div>
@@ -190,7 +200,7 @@
         border-radius: 50%;
     }
 
-    #no-paint {
+    #no-palette {
         text-align: center;
         margin-top: 2rem;
     }

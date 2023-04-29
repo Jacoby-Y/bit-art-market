@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { drawArtToCanvas } from "../utils/art";
     import config from "../config";
+    import ViewPalettes from "./ViewPalettes.svelte";
 
     let canvas: HTMLCanvasElement;
     let ctx: CanvasRenderingContext2D;
@@ -12,7 +13,7 @@
     export let pixels: number[] = [];
 
     let selected_theme = "B&W";
-    $: selected_palette = config.color_map[selected_theme] ?? config.color_map["B&W"];
+    $: selected_palette = config.palette_map[selected_theme] ?? config.palette_map["B&W"];
     let selecting_theme = false;
 
     $: ctx && selected_theme && drawPixels();
@@ -90,28 +91,13 @@
         {#each selected_palette as color, i}
             <div class="color" style="background-color: {color}" class:selected={selected_color == i} on:click={()=>{ selected_color = i }}></div>
         {/each}
-        <i class="bi bi-paint-bucket" id="fill" on:click={fillAll}></i>
+        <i class="bi bi-droplet-half" id="fill" on:click={fillAll}></i>
     </div>
     <canvas bind:this={canvas} style="width: {size}px; height: {size}px;"></canvas>
 </main>
 
 {#if selecting_theme}
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<main id="palette-test" on:click={()=>{selecting_theme = false}}>
-    <h2>Test out a color palette!</h2>
-    <div id="wrapper">
-        {#each Object.entries(config.color_map) as [name, [a, b, c]]}
-            <div class="color-wrapper" on:click={()=> setTheme(name)}>
-                <h3>{name}</h3>
-                <div class="colors">
-                    <div class="color" style="background-color: {a}; border-color: {c}33;"></div>
-                    <div class="color" style="background-color: {b}; border-color: {a}33;"></div>
-                    <div class="color" style="background-color: {c}; border-color: {b}33;"></div>
-                </div>
-            </div>
-        {/each}
-    </div>
-</main>
+    <ViewPalettes title="Test out a color palette!" on:click={()=>{selecting_theme = false}} clickColor={setTheme} />
 {/if}
 
 <style>
@@ -152,78 +138,6 @@
     }
     canvas {
         border: 2px solid white;
-    }
-
-    #palette-test {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #00000099;
-        z-index: 10;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        color: white;
-    }
-    #palette-test > h2 {
-        background-color: #1d1d21;
-        padding: 1rem 1.2rem;
-        /* padding-bottom: 0; */
-        border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem;
-    }
-    #palette-test #wrapper {
-        background-color: #1d1d21;
-        padding: 1rem 2rem;
-        padding-bottom: 2rem;
-        border-radius: 10px;
-
-        max-height: 80vh;
-        max-width: calc(100% - 2rem);
-        overflow-y: scroll;
-
-        /* display: flex;
-        flex-direction: column;
-        gap: 1rem; */
-
-        /* display: grid;
-        grid-auto-columns: max-content;
-        gap: 1rem 2rem; */
-
-        width: 40rem;
-
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem 2rem;
-        justify-content: center;
-    }
-
-    #palette-test .color-wrapper {
-        transition-duration: 0.3s;
-        cursor: pointer;
-    }
-    #palette-test .color-wrapper:hover {
-        transform: scale(1.1);
-    }
-
-    #palette-test .colors {
-        display: flex;
-        gap: 1rem;
-    }
-    #palette-test .color {
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 50%;
-        border: 2px solid;
-    }
-    #palette-test h3 {
-        text-align: center;
-        padding: 0.5rem;
     }
 
 </style>

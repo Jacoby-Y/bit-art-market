@@ -29,12 +29,13 @@ const getArtData = async (art_doc, uid=null)=>{
     }
 
     const data = art_doc.id;
-    const { artist, owner, cost } = art_doc.data();
+    const { artist, owner, cost, palette } = art_doc.data();
 
     return {
         artist: artist.username,
         owner: owner.username,
-        cost, data, likes, dislikes, user_rating
+        cost, data, likes, dislikes, user_rating,
+        palette,
     }
 }
 

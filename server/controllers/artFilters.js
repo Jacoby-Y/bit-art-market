@@ -12,7 +12,7 @@ const getRatings = async (doc_ref)=>{
 const sliceQuery = async (query, page_size, page, uid=null)=>{
     const snapshot = await query.limit(page_size).offset(page * page_size).get();
     const docs = await Promise.all(snapshot.docs.map(async (doc)=>{
-        const { artist, owner, cost } = doc.data();
+        const { artist, owner, cost, palette } = doc.data();
 
         let user_rating = null;
 
@@ -32,6 +32,7 @@ const sliceQuery = async (query, page_size, page, uid=null)=>{
             // timestamp: doc.data().timestamp._seconds,
             cost,
             user_rating,
+            palette,
             ...(await getRatings(doc.ref)),
         }
     }));
@@ -40,7 +41,7 @@ const sliceQuery = async (query, page_size, page, uid=null)=>{
 
 const sortSliceQuery = async (query, page_size, page, sorter, uid=null)=>{
     const docs = (await Promise.all(query.docs.map(async (doc)=>{
-        const { artist, owner, cost } = doc.data();
+        const { artist, owner, cost, palette } = doc.data();
 
         let user_rating = null;
 
@@ -60,6 +61,7 @@ const sortSliceQuery = async (query, page_size, page, sorter, uid=null)=>{
             // timestamp: doc.data().timestamp._seconds,
             cost,
             user_rating,
+            palette,
             ...(await getRatings(doc.ref)),
         }
     }))).sort(sorter).slice(page_size * page, page_size * page + page_size);

@@ -1,4 +1,4 @@
-const color_map: {[name: string]: Palette} = {
+const palette_map: {[name: string]: Palette} = {
     "B&W":           ["#000000", "#808080", "#ffffff"],
     "Old Glory":     ["#3a396b", "#f7f7f7", "#ac2132"],
     "CMYK":          ["#dd00dd", "#00dddd", "#dddd00"],
@@ -15,5 +15,5 @@ const color_map: {[name: string]: Palette} = {
 
 export default {
     art_cost: 50,
-    color_map
+    palette_map
 }

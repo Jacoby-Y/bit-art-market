@@ -23,7 +23,7 @@
         drawCanvas();
     });
 
-    const drawCanvas = ()=> drawArtToCanvas(ctx, art_data.data, true, config.color_map[art_data.palette] ?? config.color_map["B&W"]);
+    const drawCanvas = ()=> drawArtToCanvas(ctx, art_data.data, true, config.palette_map[art_data.palette] ?? config.palette_map["B&W"]);
 
     let posting_rating = false;
     const rateArt = async (type: ("likes" | "dislikes"))=>{
@@ -123,7 +123,7 @@
         <canvas bind:this={canvas} style="border-color: {colorFromStr(art_data.data)}"></canvas>
         {#if editing && !just_draw_it}
         <div id="editor">
-            <p class="hint">Any cost above 0 will put the art piece up for sale.</p>
+            <p class="hint">Any cost above 0 will put the art piece up for sale.<br><b>Note: </b>buyers also get the color palette on a piece they buy</p>
             <div>
                 <input type="integer" placeholder="New art cost" bind:value={cost_input} />
                 <button disabled={!valid_cost} on:click={setCost}>Set cost</button>
@@ -197,7 +197,9 @@
         bottom: 0;
         right: 0;
         left: 0;
-        background-color: #000000aa;
+        background-color: #000000cc;
+
+        border-radius: 9px;
 
         display: flex;
         flex-direction: column;
@@ -207,6 +209,7 @@
     #editor .hint {
         padding: 10px 0;
         color: white;
+        line-height: 1.2rem;
     }
     #editor > div {
         width: 100%;

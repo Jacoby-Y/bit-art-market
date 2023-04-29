@@ -22,6 +22,9 @@
         
         gallery = res.data.gallery;
         $user_gallery = gallery;
+
+        console.log(gallery[6]);
+        // console.log(gallery.map(v => v.palette));
         // gallery[7].palette = "Old Glory";
 
         const self = await client.getSelf();
@@ -72,6 +75,10 @@
                 margin-left: -2px;
                 border-right: 2px solid black;
                 margin-right: -2px;
+            }
+
+            &:hover {
+                filter: brightness(120%);
             }
         }
     }

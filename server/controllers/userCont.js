@@ -90,7 +90,7 @@ export const getSelf = async (req, res)=>{
         return [400, "User doesn't exist!"];
     }
 
-    let { username, coins, daily_login } = user_doc.data();
+    let { username, coins, daily_login, palettes } = user_doc.data();
 
     let daily_gain = 0;
     const time_gap = Math.round(Date.now()/1000) - daily_login._seconds;
@@ -116,7 +116,13 @@ export const getSelf = async (req, res)=>{
     const jwt_cookie = jwt.sign({ uid: req.uid, username, coins }, process.env.JWT_SECRET, {});
     res.cookie("accessToken", jwt_cookie, { httpOnly: true });
 
-    return [200, "Welcome back!", { username, coins, daily_gain, hours_to_bonus: Math.round(((60*60*20 - time_gap)/60/60)*10)/10 }];
+    return [200, "Welcome back!", {
+        username,
+        coins,
+        daily_gain,
+        hours_to_bonus: Math.round(((60*60*20 - time_gap)/60/60)*10)/10,
+        palettes,
+    }];
 }
 
 

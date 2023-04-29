@@ -34,7 +34,7 @@
     import { replace } from "svelte-spa-router";
     import { onMount } from "svelte/internal";
     import client from "./utils/client";
-    import { alert, loading, palette_edit, user } from "./stores/store";
+    import { alert, loading, palette_edit, palette_inv, user } from "./stores/store";
     import PaletteModal from "./comps/PaletteModal.svelte";
     
 
@@ -52,6 +52,7 @@
         else {
             if (res.data.daily_gain > 0) alert.set({ theme: "info", msg: `You gained ${res.data.daily_gain} coins today!` });
             $user = { username: res.data.username, coins: res.data.coins };
+            $palette_inv = res.data.palettes ?? {};
         }
 
         loading_user = false;

@@ -110,6 +110,15 @@ const getFollowingPopular = async (): Promise<ClientResult<{ results: FollowingT
 }
 //#endregion
 
+//#region | Paints and Palettes
+const buyPalette = async (): Promise<ClientResult<{ new_palette: string, palettes: Palettes, coins: number }>>=>{
+    return await get(`/palette/buy-palette`);
+}
+const setPalette = async (art_id: string, set_palette: string): Promise<ClientResult<{ palettes: Palettes }>>=>{
+    return await post("/palette/set-palette", { art_id, set_palette });
+}
+//#endregion
+
 export default {
     login,
     setName,
@@ -125,5 +134,7 @@ export default {
     toggleFollow,
     getFollowingPopular,
     threeRandom,
-    getLogs
+    getLogs,
+    buyPalette,
+    setPalette,
 }

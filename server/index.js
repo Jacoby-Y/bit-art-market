@@ -21,22 +21,21 @@ const app = express();
 import userRoutes from "./routes/user.js";
 import artRoutes from "./routes/art.js";
 import followRoutes from "./routes/follow.js";
+import paletteRoutes from "./routes/palette.js";
 
 app.use(cors({ origin: ["http://10.65.1.237:5173", "http://localhost:5173"], credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.static("public"));
+
 app.use("/api/user", userRoutes);
 app.use("/api/art", artRoutes);
-app.use("/api/follow", followRoutes)
+app.use("/api/follow", followRoutes);
+app.use("/api/palette", paletteRoutes);
 
 //#endregion
 
 //#region | Final steps
-// app.get("/", (req, res)=>{
-//     res.sendFile(path.join(__dirname, "public"));
-// });
-
 app.get("*", cors(), (_, res)=>{
     res.sendFile(path.join(__dirname, "public"));
 });

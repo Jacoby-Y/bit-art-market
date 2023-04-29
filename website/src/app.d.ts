@@ -55,11 +55,11 @@ interface FollowingTopThree {
     top_three: ArtData[]
 }
 
-type GetSelf = ClientResult<{ username: string; coins: number; daily_gain: number; hours_to_bonus: number; }>
+type GetSelf = ClientResult<{ username: string; coins: number; daily_gain: number; hours_to_bonus: number; palettes?: Palettes }>
 
 type Palette = [string, string, string];
 
-type Paints = {
+type Palettes = {
     [name: string]: number
 }
 

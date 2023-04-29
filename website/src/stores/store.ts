@@ -5,9 +5,9 @@ export const alert = writable<Alert>({ theme: "info", msg: null });
 export const user = writable<User | null>(null);
 export const loading = writable({ on: false, center: true });
 
-export const paint_inv = writable<Paints>(
+export const palette_inv = writable<Palettes>(
     Object.fromEntries(
-        Object.keys(config.color_map).filter(k => k != "B&W").map(k => [k, 1])
+        Object.keys(config.palette_map).filter(k => k != "B&W").map(k => [k, 1])
     )
 );
 

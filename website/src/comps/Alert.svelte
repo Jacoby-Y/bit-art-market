@@ -68,7 +68,7 @@
         border: inherit;
         font-size: 1.2rem;
         padding: 0.1rem 0.5rem;
-        border-radius: 50%;
+        border-radius: 1.5rem;
     }
 
     @media only screen and (max-width: 1000px) {
