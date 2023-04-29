@@ -17,8 +17,8 @@ export const buyPalette = async (req, res)=>{
         return [400, "You can't afford this item!"];
     }
 
-    palettes ??= {};
-    palettes_bought ??= 0;
+    if (palettes == undefined) palettes = {};
+    if (palettes_bought == undefined) palettes_bought = 0;
 
     const rand_palette = config.palettes[Math.floor(Math.random() * (config.palettes.length - 1)) + 1];
     
