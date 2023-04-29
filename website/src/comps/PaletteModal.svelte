@@ -9,12 +9,14 @@
     $: art_data = $palette_edit.art_data;
     $: palette = config.palette_map[art_data.palette] ?? config.palette_map["B&W"];
     const og_palette = art_data.palette ?? "B&W";
-    let selected_palette: string = null;
+    let selected_palette: string = og_palette;
 
     // $: console.log(Object.assign(art_data, { palette: selected_palette }))
     // $: console.log(art_data.palette);
 
-    const inventory = (og_palette == "B&W" ? [] : [["B&W", Infinity]]).concat(Object.entries($palette_inv));
+    console.log(og_palette);
+
+    const inventory = (og_palette == "B&W" ? [] : [["B&W", Infinity]]).concat(Object.entries($palette_inv ?? {}));
 
     const close = ()=>{
         $palette_edit.on = false;
@@ -38,13 +40,6 @@
         $user_gallery = $user_gallery;
 
         $palette_inv = res.data.palettes;
-
-        // if (og_palette == "B&W") {
-        //     $palette_inv[selected_palette]--;
-        // } else {
-        //     $palette_inv[og_palette]++;
-        //     $palette_inv[selected_palette]--;
-        // }
 
         close();
     }
@@ -88,7 +83,7 @@
         {#if selected_palette && selected_palette != og_palette}
             <button id="select-btn" on:click={useThisPalette}>Select palette?</button>
         {/if}
-        <i class="bi bi-x-circle-fill" id="x" on:click={close} />
+        <!-- <i class="bi bi-x-circle-fill" id="x" on:click={close} /> -->
     </div>
 </main>
 
@@ -111,10 +106,13 @@
         position: relative;
 
         display: flex;
+        flex-wrap: wrap;
         gap: 1rem;
         align-items: center;
+        justify-content: center;
     }
     #palette-wrapper {
+        position: relative;
         padding: 1rem;
         border-radius: 0.5rem;
         background-color: #ddcbe0;
@@ -127,7 +125,8 @@
 
     #select-btn {
         position: absolute;
-        right: 10rem;
+        /* right: 10rem; */
+        right: 50%;
         top: 100%;
         transform: translate(50%, 1rem);
         background-color: #ddd;

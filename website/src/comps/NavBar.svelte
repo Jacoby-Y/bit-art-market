@@ -37,7 +37,7 @@
     <a href="/" use:link id="home"><i class="bi bi-arrow-left-square-fill"></i></a>
     {:else}
     <nav>
-        <a href="/login" use:link>Login</a>
+        <a href="/login" use:link><i class="bi bi-box-arrow-in-right"></i></a>
     </nav>
     {/if}
 </main>

@@ -7,6 +7,7 @@
 <main class="flex-page">
     <h1>Shop!</h1>
     <RandPalette />
+    <h3><a href="https://forms.gle/kdcpQWApDjJychzm8" target="_blank">What else should I add?</a></h3>
 </main>
 
 <style>

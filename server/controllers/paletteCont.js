@@ -54,7 +54,7 @@ export const setPalette = async (req, res)=>{
 
     const palettes = user_doc.data().palettes ?? {};
 
-    if (!palettes[set_palette] || palettes[set_palette] <= 0) {
+    if (set_palette != config.og_palette && (!palettes[set_palette] || palettes[set_palette] <= 0)) {
         return [400, "You don't have that palette!"];
     }
 
@@ -87,7 +87,7 @@ export const setPalette = async (req, res)=>{
         palettes
     });
 
-    return [200, "Palette set!", {}]
+    return [200, "Palette set!", { palettes }];
 }
 
 export default {

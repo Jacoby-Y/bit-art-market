@@ -226,7 +226,7 @@ export const purchase = async (req, res)=>{
     });
 
     if (await addLog(prev_owner, `${art_data.owner.username} bought your art!`)) {
-        console.log("Added log!");
+        // console.log("Added log!");
     } else {
         console.log("No log!");
     }
