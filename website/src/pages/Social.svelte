@@ -3,7 +3,7 @@
     import { link, replace } from "svelte-spa-router";
     import ArtPiece from "../comps/ArtPiece.svelte";
     import Loading from "../comps/Loading.svelte";
-    import { alert, user } from "../stores/store";
+    import { alert, nav_open, user } from "../stores/store";
     import client from "../utils/client";
 
     if ($user == null) replace("/login");
@@ -18,7 +18,7 @@
 </script>
 
 {#if results}
-<main class="flex-page">
+<main class="flex-page" style="{$nav_open && "max-width: calc(100vw - 4.5rem);"}">
     {#each results as { username, top_three }}
         <section>
             <h2 class="username"><a href="/gallery/{username}" use:link>{username}</a> <span class="hint">(Top three pieces)</span> </h2>
@@ -37,8 +37,10 @@
 <style>
     main {
         justify-content: start;
-        padding-top: 8rem;
+        padding: 2rem 0;
         gap: 1rem;
+        /* max-width: calc(100vw - 4.5rem); */
+        max-width: 100vw;
     }
     .username {
         padding: 0.5rem 2rem;
@@ -49,6 +51,9 @@
     .username .hint {
         font-weight: normal;
         font-size: 1.2rem;
+    }
+    section {
+        max-width: 100%;
     }
     .art-row {
         padding: 1rem 2rem;

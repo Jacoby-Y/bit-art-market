@@ -1,22 +1,40 @@
 <script>
-    import { link } from 'svelte-spa-router'
-    import { alert, user } from '../stores/store';
+    import { link, location } from 'svelte-spa-router'
+    import { alert, nav_open, user } from '../stores/store';
 
-    let menu_open = false;
+    let menu_open = true;
+    let user_width = 0;
+
+    $: $nav_open = menu_open;
+
+    const links = [
+        ["/home", "bi-house-fill"], 
+        ["/social", "bi-people-fill"], 
+        ["/search/popular", "bi-search"], 
+        ["/canvas", "bi-easel-fill"], 
+        ["/shop", "bi-cart-fill"], 
+    ];  
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<main on:click={()=>(menu_open = false, alert.set({ theme: "info", msg: null }))} class:open={menu_open}>
+<main
+    style="clip-path: inset(0 -{user_width}px 0 0);"
+    on:click={()=>(alert.set({ theme: "info", msg: null }))}
+    class:open={menu_open}
+    >
+    <i class="bi bi-list"></i>
     {#if $user != null}
-    <h3 id="user-txt"><a href="/gallery/{$user.username}" use:link>{$user.username}</a> <i class="bi bi-coin">{$user.coins}</i></h3>
+    <h3 id="user-txt" bind:clientWidth={user_width}>
+        <a href="/gallery/{$user.username}" use:link>{$user.username}</a>
+        <br/>
+        <i class="bi bi-coin">{$user.coins}</i>
+    </h3>
     <nav>
-        <a href="/home" use:link>Home</a>
-        <a href="/social" use:link>Social</a>
-        <a href="/search/popular" use:link>Search</a>
-        <a href="/canvas" use:link>Canvas</a>
-        <a href="/shop" use:link>Shop</a>
+        {#each links as [to, icon], i}
+            <a href="{to}" use:link class:selected={$location.includes(to)}><i class="bi {icon}"></i></a>
+        {/each}
     </nav>
-    <a href="/" use:link id="home"><i class="bi bi-house-fill"></i></a>
+    <a href="/" use:link id="home"><i class="bi bi-arrow-left-square-fill"></i></a>
     {:else}
     <nav>
         <a href="/login" use:link>Login</a>
@@ -26,8 +44,101 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <i class="bi bi-list" id="menu-toggle" on:click={()=>{ menu_open = !menu_open }}></i>
 
+<div id="nav-backdrop"></div>
+
 <style>
+    #nav-backdrop {
+        width: 4.5rem;
+        transition-duration: 0.3s;
+    }
     main {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        padding-top: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #1d1d21;
+        z-index: 5;
+        clip-path: inset(0 -100rem 0 0);
+        transition-duration: 0.3s;
+    }
+    main:not(.open) {
+        clip-path: inset(0 100% 0 0) !important;
+    }
+    main:not(.open) ~ #nav-backdrop {
+        width: 0;
+    }
+    nav {
+        display: flex;
+        flex-direction: column;
+        padding: 4rem 0.5rem;
+        padding-top: 2rem;
+        gap: 3rem;
+    }
+    nav a.selected {
+        position: relative;
+    }
+    nav a.selected:after {
+        position: absolute;
+        content: "—";
+        left: 50%;
+        top: 100%;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+    }
+    a, i.bi {
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    i.bi {
+        padding: 1rem;
+    }
+    a i.bi {
+        border-radius: 50%;
+        transition-duration: 0.3s;
+        background: radial-gradient(#1d1d21, #1d1d21 80%);
+    }
+    a i.bi:hover {
+        background: radial-gradient(#313138, #1d1d21 80%);
+    }
+    a {
+        color: white;
+    }
+
+    #user-txt {
+        position: absolute;
+        left: 100%;
+        top: 0;
+        line-height: 2rem;
+
+        width: max-content;
+        background-color: #1d1d21;
+        padding: 1rem 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+    #user-txt a {
+        padding-right: 0.7rem;
+    }
+    #user-txt .bi {
+        padding: 0;
+    }
+
+    #menu-toggle {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: red;
+        width: 4.5rem;
+        text-align: center;
+        border-bottom-right-radius: 1rem;
+        background-color: #1d1d21;
+        z-index: 6;
+    }
+
+    /* main {
         position: relative;
         width: 100%;
         display: flex;
@@ -97,8 +208,6 @@
             min-width: 275px;
             width: 50%;
             padding-top: 4rem;
-            /* padding-bottom: 2rem; */
-            /* height: 100%; */
             transform: translate(100%, 0);
             transition-duration: 0.3s;
             border-bottom-left-radius: 10px;
@@ -156,4 +265,5 @@
             padding: 1.2rem 2rem;
         }
     }
+    */
 </style>

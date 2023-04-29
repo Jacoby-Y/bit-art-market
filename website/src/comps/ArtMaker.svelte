@@ -89,8 +89,6 @@
         <i class="bi bi-palette" id="palette-btn" on:click={()=>{selecting_theme = true}}></i>
         {#each selected_palette as color, i}
             <div class="color" style="background-color: {color}" class:selected={selected_color == i} on:click={()=>{ selected_color = i }}></div>
-            <!-- <div class="color" style="background-color: #808080" class:selected={selected_color == 1} on:click={()=>{ selected_color = 1 }}></div>
-            <div class="color" style="background-color: #ffffff" class:selected={selected_color == 2} on:click={()=>{ selected_color = 2 }}></div> -->
         {/each}
         <i class="bi bi-paint-bucket" id="fill" on:click={fillAll}></i>
     </div>
@@ -100,14 +98,15 @@
 {#if selecting_theme}
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <main id="palette-test" on:click={()=>{selecting_theme = false}}>
+    <h2>Test out a color palette!</h2>
     <div id="wrapper">
         {#each Object.entries(config.color_map) as [name, [a, b, c]]}
             <div class="color-wrapper" on:click={()=> setTheme(name)}>
                 <h3>{name}</h3>
                 <div class="colors">
-                    <div class="color" style="background-color: {a};"></div>
-                    <div class="color" style="background-color: {b};"></div>
-                    <div class="color" style="background-color: {c};"></div>
+                    <div class="color" style="background-color: {a}; border-color: {c}33;"></div>
+                    <div class="color" style="background-color: {b}; border-color: {a}33;"></div>
+                    <div class="color" style="background-color: {c}; border-color: {b}33;"></div>
                 </div>
             </div>
         {/each}
@@ -129,7 +128,8 @@
         margin-bottom: -2px;
     }
     #colors .color {
-        border: 1px solid black;
+        position: relative;
+        border: 2px solid black;
         width: 2rem;
         height: 2rem;
         border-radius: 5px;
@@ -138,6 +138,7 @@
     }
     #colors .color.selected {
         border-radius: 50%;
+        top: 5px;
     }
     #fill, #palette-btn {
         color: black;
@@ -163,16 +164,27 @@
         z-index: 10;
 
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+
+        color: white;
+    }
+    #palette-test > h2 {
+        background-color: #1d1d21;
+        padding: 1rem 1.2rem;
+        /* padding-bottom: 0; */
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
     }
     #palette-test #wrapper {
-        background-color: #ddcbe0;
+        background-color: #1d1d21;
         padding: 1rem 2rem;
         padding-bottom: 2rem;
         border-radius: 10px;
 
         max-height: 80vh;
+        max-width: calc(100% - 2rem);
         overflow-y: scroll;
 
         /* display: flex;
@@ -183,7 +195,7 @@
         grid-auto-columns: max-content;
         gap: 1rem 2rem; */
 
-        max-width: 40rem;
+        width: 40rem;
 
         display: flex;
         flex-wrap: wrap;
@@ -207,10 +219,10 @@
         width: 2.5rem;
         height: 2.5rem;
         border-radius: 50%;
+        border: 2px solid;
     }
     #palette-test h3 {
         text-align: center;
-        color: black;
         padding: 0.5rem;
     }
 

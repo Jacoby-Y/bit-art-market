@@ -17,3 +17,5 @@ export const palette_edit = writable<PaletteEdit>({
     on: false,
     art_data: null,
 });
+
+export const nav_open = writable(false);

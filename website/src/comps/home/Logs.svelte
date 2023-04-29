@@ -35,7 +35,7 @@
     }
 
     .log {
-        background-color: #333;
+        background-color: #1d1d21;
         padding: 1rem 1.2rem;
         border-radius: 10px;
         width: 100%;

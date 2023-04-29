@@ -60,9 +60,9 @@
             {/each}
         </div>
         <div id="page-number">
-            <span class="arrow" class:disabled={page <= 0} on:click={()=> loadPage(--page)}>&lt;</span>
+            <i class="bi bi-arrow-left-circle-fill arrow" class:disabled={page <= 0} on:click={()=> loadPage(--page)}></i>
             <b>Page: {page + 1}</b>
-            <span class="arrow" on:click={()=> loadPage(++page)}>&gt;</span>
+            <i class="bi bi-arrow-right-circle-fill arrow" on:click={()=> loadPage(++page)}></i>
         </div>
         <Gallery {gallery} hide_owner={true} />
     </section>
@@ -89,7 +89,10 @@
         pointer-events: none;
     }
     .filter {
-        background-color: #555;
+        /* background-color: #1d1d21; */
+        background-color: white;
+        color: black;
+        font-weight: bold;
         padding: 0.5rem 0.7rem;
         border-radius: 1rem;
         cursor: pointer;
@@ -97,13 +100,16 @@
         text-transform: capitalize;
     }
     .filter:hover {
-        background-color: #666;
+        /* background-color: #2c2c31; */
+        filter: brightness(80%);
     }
     .filter.selected {
-        border-left: 2px solid #bbb;
+        /* border-left: 2px solid #bbb;
         margin-left: -2px;
         border-right: 2px solid #bbb;
-        margin-right: -2px;
+        margin-right: -2px; */
+        background-color: #000011;
+        color: white;
     }
 
     #page-number {
@@ -119,11 +125,11 @@
         text-align: center;
         display: block;
         cursor: pointer;
-        background-color: #55555599;
+        background-color: #1d1d2199;
         border-radius: 50%;
     }
     #page-number .arrow:hover {
-        background-color: #555555;
+        background-color: #1d1d21;
     }
     #page-number .arrow.disabled {
         pointer-events: none;

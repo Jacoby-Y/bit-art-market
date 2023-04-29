@@ -51,7 +51,7 @@
 <style lang="scss">
     main {
         justify-content: flex-start;
-        padding-top: 6rem;
+        padding-top: 2rem;
     }
     #tabs {
         display: flex;
@@ -60,7 +60,7 @@
         gap: 1rem;
 
         p {
-            background-color: #444;
+            background-color: #1d1d21;
             padding: 1rem 1.2rem;
             border-radius: 2rem;
             font-weight: bold;
@@ -68,9 +68,9 @@
             cursor: pointer;
 
             &.selected {
-                border-left: 2px solid #bbb;
+                border-left: 2px solid black;
                 margin-left: -2px;
-                border-right: 2px solid #bbb;
+                border-right: 2px solid black;
                 margin-right: -2px;
             }
         }
